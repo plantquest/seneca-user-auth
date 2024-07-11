@@ -16,6 +16,8 @@ module.exports.errors = {}
 
 const intern = (module.exports.intern = make_intern())
 
+const { KindeClient } = require('@kinde/kinde-sdk');
+
 module.exports.defaults = {
   test: false,
 
@@ -62,9 +64,16 @@ module.exports.defaults = {
   make_token: intern.make_token,
 }
 
-function user(options) {
+function user(options,credentials) {
   var seneca = this
   var ctx = intern.make_ctx({}, options)
+
+  const kinde = new KindeClient({
+    clientId: credentials.clientId,
+    clientSecret: credentials.clientSecret,
+    domain: credentials.domain,
+  });
+  
 
   // TODO @seneca/audit - record user modifications - e.g activate
   // TODO @seneca/microcache - short duration cache of msg responses
