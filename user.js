@@ -15,8 +15,9 @@ module.exports = user
 module.exports.errors = {}
 
 const intern = (module.exports.intern = make_intern())
+require("dotenv").config();
 
-const { KindeClient } = require('@kinde/kinde-sdk');
+const {KindeClient, GrantType} = require("@kinde-oss/kinde-nodejs-sdk");
 
 module.exports.defaults = {
   test: false,
@@ -69,9 +70,12 @@ function user(options,credentials) {
   var ctx = intern.make_ctx({}, options)
 
   const kinde = new KindeClient({
-    clientId: credentials.clientId,
-    clientSecret: credentials.clientSecret,
-    domain: credentials.domain,
+    domain: process.env.KINDE_DOMAIN,
+    clientId: process.env.KINDE_CLIENT_ID,
+    clientSecret: process.env.KINDE_CLIENT_SECRET,
+    redirectUri: process.env.KINDE_REDIRECT_URI,
+    logoutRedirectUri: process.env.KINDE_LOGOUT_REDIRECT_URI,
+    grantType: GrantType.PKCE
   });
   
 
